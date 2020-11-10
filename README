@@ -1,0 +1,5 @@
+# ffmpeg-go
+
+ffmpeg-go is golang port of https://github.com/kkroening/ffmpeg-python
+
+check ffmpeg_test.go for examples.
