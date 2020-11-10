@@ -278,3 +278,14 @@ func TestPipe(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, outBuf.Len(), frameSize*(frameCount-startFrame))
 }
+
+func TestView(t *testing.T) {
+	a, err := ComplexFilterExample().View(ViewTypeFlowChart)
+	assert.Nil(t, err)
+
+	b, err := ComplexFilterAsplitExample().View(ViewTypeStateDiagram)
+	assert.Nil(t, err)
+
+	t.Log(a)
+	t.Log(b)
+}
