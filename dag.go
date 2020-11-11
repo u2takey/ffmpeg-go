@@ -35,7 +35,7 @@ import (
 //
 // String representation:
 // In order for graph visualization tools to show useful information, nodes must be representable as strings.  The
-// ``repr`` operator should provide a more or less "full" representation of the node, and the ``short_repr``
+// ``String`` operator should provide a more or less "full" representation of the node, and the ``ShortRepr``
 // property should be a shortened, concise representation.
 //
 // Again, because nodes are immutable, the string representations should remain constant.

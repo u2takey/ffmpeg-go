@@ -50,22 +50,10 @@ func (s *Stream) MergeOutputs(streams ...*Stream) *Stream {
 	return NewMergeOutputsNode("merge_output", streams).Stream("", "")
 }
 
-func Output(streams []*Stream, fileName string, kwargs ...KwArgs) *Stream {
-	args := MergeKwArgs(kwargs)
-	if !args.HasKey("filename") {
-		if fileName == "" {
-			panic("filename must be provided")
-		}
-		args["filename"] = fileName
-	}
-
-	return NewOutputNode("output", streams, nil, args).Stream("", "")
-}
-
 //Output file URL
 //
 //    Syntax:
-//        `ffmpeg.output(stream1[, stream2, stream3...], filename, **ffmpeg_args)`
+//        `ffmpeg.Output([]*Stream{stream1, stream2, stream3...}, filename, kwargs)`
 //
 //    Any supplied keyword arguments are passed to ffmpeg verbatim (e.g.
 //    ``t=20``, ``f='mp4'``, ``acodec='pcm'``, ``vcodec='rawvideo'``,
@@ -84,6 +72,18 @@ func Output(streams []*Stream, fileName string, kwargs ...KwArgs) *Stream {
 //
 //    Official documentation: `Synopsis <https://ffmpeg.org/ffmpeg.html#Synopsis>`__
 //    """
+func Output(streams []*Stream, fileName string, kwargs ...KwArgs) *Stream {
+	args := MergeKwArgs(kwargs)
+	if !args.HasKey("filename") {
+		if fileName == "" {
+			panic("filename must be provided")
+		}
+		args["filename"] = fileName
+	}
+
+	return NewOutputNode("output", streams, nil, args).Stream("", "")
+}
+
 func (s *Stream) Output(fileName string, kwargs ...KwArgs) *Stream {
 	if s.Type != "FilterableStream" {
 		panic("cannot output on non-FilterableStream")

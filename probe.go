@@ -7,14 +7,7 @@ import (
 	"time"
 )
 
-// Run ffprobe on the specified file and return a JSON representation of the output.
-//
-//  Raises:
-//        :class:`ffmpeg.Error`: if ffprobe returns a non-zero exit code,
-//            an :class:`Error` is returned with a generic error message.
-//            The stderr output can be retrieved by accessing the
-//            ``stderr`` property of the exception.
-
+// Probe Run ffprobe on the specified file and return a JSON representation of the output.
 func Probe(fileName string, kwargs ...KwArgs) (string, error) {
 	return ProbeWithTimeout(fileName, 0, MergeKwArgs(kwargs))
 }
