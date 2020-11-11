@@ -15,8 +15,8 @@ import (
 //            The stderr output can be retrieved by accessing the
 //            ``stderr`` property of the exception.
 
-func Probe(fileName string, kwargs KwArgs) (string, error) {
-	return ProbeWithTimeout(fileName, 0, kwargs)
+func Probe(fileName string, kwargs ...KwArgs) (string, error) {
+	return ProbeWithTimeout(fileName, 0, MergeKwArgs(kwargs))
 }
 
 func ProbeWithTimeout(fileName string, timeOut time.Duration, kwargs KwArgs) (string, error) {
