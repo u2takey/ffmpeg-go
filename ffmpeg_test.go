@@ -9,6 +9,12 @@ import (
 	"github.com/u2takey/go-utils/rand"
 )
 
+const (
+	TestInputFile1  = "./examples/sample_data/in1.mp4"
+	TestOutputFile1 = "./examples/sample_data/out1.mp4"
+	TestOverlayFile = "./examples/sample_data/overlay.png"
+)
+
 func TestFluentEquality(t *testing.T) {
 	base1 := Input("dummy1.mp4")
 	base2 := Input("dummy1.mp4")
@@ -120,7 +126,7 @@ func TestFilterWithSelector(t *testing.T) {
 	i := Input(TestInputFile1)
 
 	v1 := i.Video().HFlip()
-	a1 := i.Audio().Filter("aecho", []string{"0.8", "0.9", "1000", "0.3"})
+	a1 := i.Audio().Filter("aecho", Args{"0.8", "0.9", "1000", "0.3"})
 
 	out := Output([]*Stream{a1, v1}, TestOutputFile1)
 	assert.Equal(t, []string{

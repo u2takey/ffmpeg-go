@@ -11,15 +11,15 @@ func AssetType(hasType, expectType string, action string) {
 	}
 }
 
-func FilterMultiOutput(streamSpec []*Stream, filterName string, args []string, kwArgs ...KwArgs) *Node {
+func FilterMultiOutput(streamSpec []*Stream, filterName string, args Args, kwArgs ...KwArgs) *Node {
 	return NewFilterNode(filterName, streamSpec, -1, args, MergeKwArgs(kwArgs))
 }
 
-func Filter(streamSpec []*Stream, filterName string, args []string, kwArgs ...KwArgs) *Stream {
+func Filter(streamSpec []*Stream, filterName string, args Args, kwArgs ...KwArgs) *Stream {
 	return FilterMultiOutput(streamSpec, filterName, args, MergeKwArgs(kwArgs)).Stream("", "")
 }
 
-func (s *Stream) Filter(filterName string, args []string, kwArgs ...KwArgs) *Stream {
+func (s *Stream) Filter(filterName string, args Args, kwArgs ...KwArgs) *Stream {
 	AssetType(s.Type, "FilterableStream", "filter")
 	return Filter([]*Stream{s}, filterName, args, MergeKwArgs(kwArgs))
 }

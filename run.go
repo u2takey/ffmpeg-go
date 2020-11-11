@@ -57,8 +57,6 @@ func _getFilterSpec(node *Node, outOutingEdgeMap map[Label][]NodeInfo, streamNam
 	for _, e := range outEdges {
 		output = append(output, formatOutStreamName(streamNameMap, e))
 	}
-	//sort.Strings(input)
-	//sort.Strings(output)
 	return fmt.Sprintf("%s%s%s", strings.Join(input, ""), node.GetFilter(outEdges), strings.Join(output, ""))
 }
 

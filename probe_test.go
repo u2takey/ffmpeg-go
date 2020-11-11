@@ -7,12 +7,6 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-const (
-	TestInputFile1  = "./sample_data/in1.mp4"
-	TestOutputFile1 = "./sample_data/out1.mp4"
-	TestOverlayFile = "./sample_data/overlay.png"
-)
-
 func TestProbe(t *testing.T) {
 	data, err := Probe(TestInputFile1, nil)
 	assert.Nil(t, err)

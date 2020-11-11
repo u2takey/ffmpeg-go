@@ -1,40 +1,13 @@
-package main
+package examples
 
 import (
-	"bytes"
 	"encoding/json"
-	"flag"
 	"fmt"
 	"io"
 	"log"
-	"sync"
 
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
-
-var (
-	InputFile  = flag.String("in_filename", "./in1.mp4", "Input filename")
-	OutputFile = flag.String("out_filename", "./out.mp4", "Input filename")
-	Dream      = flag.Bool("dream", false, "Use DeepDream frame processing (requires tensorflow)")
-)
-
-// Buffer is a goroutine safe bytes.Buffer
-type Buffer struct {
-	buffer bytes.Buffer
-	mutex  sync.Mutex
-}
-
-func (s *Buffer) Write(p []byte) (n int, err error) {
-	s.mutex.Lock()
-	defer s.mutex.Unlock()
-	return s.buffer.Write(p)
-}
-
-func (s *Buffer) Read(p []byte) (n int, err error) {
-	s.mutex.Lock()
-	defer s.mutex.Unlock()
-	return s.buffer.Read(p)
-}
 
 func getVideoSize(fileName string) (int, int) {
 	log.Println("Getting video size for", fileName)
@@ -125,7 +98,7 @@ func process(reader io.ReadCloser, writer io.WriteCloser, w, h int) {
 	return
 }
 
-func run(inFile, outFile string) {
+func runExampleStream(inFile, outFile string) {
 	w, h := getVideoSize(inFile)
 	log.Println(w, h)
 
@@ -145,11 +118,20 @@ func run(inFile, outFile string) {
 	log.Println("Done")
 }
 
-func main() {
-	flag.Parse()
-	if *Dream == true {
-		fmt.Println("tensorflow mode not implemented, todo")
-		return
+// ExampleStream
+// inFileName: input filename
+// outFileName: output filename
+// dream: Use DeepDream frame processing (requires tensorflow)
+func ExampleStream(inFileName, outFileName string, dream bool) {
+	if inFileName == "" {
+		inFileName = "./in1.mp4"
 	}
-	run(*InputFile, *OutputFile)
+	if outFileName == "" {
+		outFileName = "./out.mp4"
+	}
+	if dream {
+		panic("Use DeepDream With Tensorflow haven't been implemented")
+	}
+
+	runExampleStream(inFileName, outFileName)
 }

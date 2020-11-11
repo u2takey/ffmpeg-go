@@ -248,13 +248,12 @@ func (n *Node) GetFilter(outgoingEdges []DagEdge) string {
 	if n.nodeType != "FilterNode" {
 		panic("call GetFilter on non-FilterNode")
 	}
-	args := n.args
-	kwargs := n.kwargs
+	args, kwargs, ret := n.args, n.kwargs, ""
 	if n.name == "split" || n.name == "asplit" {
 		args = []string{fmt.Sprintf("%d", len(outgoingEdges))}
 	}
-	// todo escape char
-	for _, k := range kwargs.SortedKeys() {
+	args = Args(args).EscapeWith("\\'=:")
+	for _, k := range kwargs.EscapeWith("\\'=:").SortedKeys() {
 		v := getString(kwargs[k])
 		if v != "" {
 			args = append(args, fmt.Sprintf("%s=%s", k, v))
@@ -262,8 +261,9 @@ func (n *Node) GetFilter(outgoingEdges []DagEdge) string {
 			args = append(args, fmt.Sprintf("%s", k))
 		}
 	}
+	ret = escapeChars(n.name, "\\'=:")
 	if len(args) > 0 {
-		return fmt.Sprintf("%s=%s", n.name, strings.Join(args, ":"))
+		ret += fmt.Sprintf("=%s", strings.Join(args, ":"))
 	}
-	return fmt.Sprintf("%s", n.name)
+	return escapeChars(ret, "\\'[],;")
 }

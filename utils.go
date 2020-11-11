@@ -6,6 +6,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/u2takey/go-utils/sets"
 )
 
 func getString(item interface{}) string {
@@ -16,6 +18,8 @@ func getString(item interface{}) string {
 	case string:
 		return a
 	case []string:
+		return strings.Join(a, ", ")
+	case Args:
 		return strings.Join(a, ", ")
 	case []interface{}:
 		var r []string
@@ -76,17 +80,36 @@ func getHash(item interface{}) int {
 	}
 }
 
-//def escape_chars(text, chars):
-//    """Helper function to escape uncomfortable characters."""
-//    text = str(text)
-//    chars = list(set(chars))
-//    if '\\' in chars:
-//        chars.remove('\\')
-//        chars.insert(0, '\\')
-//    for ch in chars:
-//        text = text.replace(ch, '\\' + ch)
-//    return text
-//
+func escapeChars(text, chars string) string {
+	s := sets.NewString()
+	for _, a := range chars {
+		s.Insert(string(a))
+	}
+	sl := s.List()
+	if s.Has("\\") {
+		s.Delete("\\")
+		sl = append([]string{"\\"}, s.List()...)
+	}
+	for _, ch := range sl {
+		text = strings.ReplaceAll(text, ch, "\\"+ch)
+	}
+	return text
+}
+
+type Args []string
+
+func (a Args) Sorted() Args {
+	sort.Strings(a)
+	return a
+}
+
+func (a Args) EscapeWith(chars string) Args {
+	out := Args{}
+	for _, b := range a {
+		out = append(out, escapeChars(b, chars))
+	}
+	return out
+}
 
 type KwArgs map[string]interface{}
 
@@ -98,6 +121,14 @@ func MergeKwArgs(args []KwArgs) KwArgs {
 		}
 	}
 	return a
+}
+
+func (a KwArgs) EscapeWith(chars string) KwArgs {
+	out := KwArgs{}
+	for k, v := range a {
+		out[escapeChars(k, chars)] = escapeChars(getString(v), chars)
+	}
+	return out
 }
 
 func (a KwArgs) Copy() KwArgs {
