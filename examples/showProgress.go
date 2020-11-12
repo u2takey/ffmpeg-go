@@ -16,9 +16,9 @@ import (
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
-// ExampleShowProgess is an example of using the ffmpeg `-progress` option with a
+// ExampleShowProgress is an example of using the ffmpeg `-progress` option with a
 //    unix-domain socket to report progress
-func ExampleShowProgess(inFileName, outFileName string) {
+func ExampleShowProgress(inFileName, outFileName string) {
 	a, err := ffmpeg.Probe(inFileName)
 	if err != nil {
 		panic(err)

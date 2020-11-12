@@ -22,6 +22,6 @@ func TestExampleReadFrameAsJpeg(t *testing.T) {
 	}
 }
 
-func TestExampleShowProgess(t *testing.T) {
-	ExampleShowProgess("./sample_data/in1.mp4", "./sample_data/out2.mp4")
+func TestExampleShowProgress(t *testing.T) {
+	ExampleShowProgress("./sample_data/in1.mp4", "./sample_data/out2.mp4")
 }
