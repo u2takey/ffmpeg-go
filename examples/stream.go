@@ -9,6 +9,24 @@ import (
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
+// ExampleStream
+// inFileName: input filename
+// outFileName: output filename
+// dream: Use DeepDream frame processing (requires tensorflow)
+func ExampleStream(inFileName, outFileName string, dream bool) {
+	if inFileName == "" {
+		inFileName = "./in1.mp4"
+	}
+	if outFileName == "" {
+		outFileName = "./out.mp4"
+	}
+	if dream {
+		panic("Use DeepDream With Tensorflow haven't been implemented")
+	}
+
+	runExampleStream(inFileName, outFileName)
+}
+
 func getVideoSize(fileName string) (int, int) {
 	log.Println("Getting video size for", fileName)
 	data, err := ffmpeg.Probe(fileName)
@@ -116,22 +134,4 @@ func runExampleStream(inFile, outFile string) {
 		panic(err)
 	}
 	log.Println("Done")
-}
-
-// ExampleStream
-// inFileName: input filename
-// outFileName: output filename
-// dream: Use DeepDream frame processing (requires tensorflow)
-func ExampleStream(inFileName, outFileName string, dream bool) {
-	if inFileName == "" {
-		inFileName = "./in1.mp4"
-	}
-	if outFileName == "" {
-		outFileName = "./out.mp4"
-	}
-	if dream {
-		panic("Use DeepDream With Tensorflow haven't been implemented")
-	}
-
-	runExampleStream(inFileName, outFileName)
 }
