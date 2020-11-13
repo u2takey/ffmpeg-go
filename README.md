@@ -23,7 +23,7 @@ err := Concat([]*Stream{
 
 # view
 
-function view generate [mermaid](https://mermaid-js.github.io/mermaid/#/) chart, which can be use in markdown or view [online](mermaid-js.github.io/mermaid-live-editor/)
+function view generate [mermaid](https://mermaid-js.github.io/mermaid/#/) chart, which can be use in markdown or view [online](https://mermaid-js.github.io/mermaid-live-editor/)
 
 ```go
 split := Input(TestInputFile1).VFlip().Split()

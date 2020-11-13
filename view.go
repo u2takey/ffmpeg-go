@@ -85,7 +85,7 @@ func visualizeForMermaidAsFlowChart(s *Stream) (string, error) {
 				if label == "" {
 					label = "<>"
 				}
-				buf.WriteString(fmt.Sprintf(`    %d --> |%s| %d`, node.Hash(), label, nextNode.Node.Hash()))
+				buf.WriteString(fmt.Sprintf(`    %d --> |%s| %d`, node.Hash(), fmt.Sprintf("%s:%s", nextNode.Label, label), nextNode.Node.Hash()))
 				buf.WriteString("\n")
 			}
 		}
