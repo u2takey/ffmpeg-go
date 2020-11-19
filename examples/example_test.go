@@ -25,3 +25,8 @@ func TestExampleReadFrameAsJpeg(t *testing.T) {
 func TestExampleShowProgress(t *testing.T) {
 	ExampleShowProgress("./sample_data/in1.mp4", "./sample_data/out2.mp4")
 }
+
+func TestExampleOpenCvFaceDetect(t *testing.T) {
+	ExampleFaceDetection("./sample_data/head-pose-face-detection-male-short.mp4",
+		"./sample_data/haarcascade_frontalface_default.xml")
+}

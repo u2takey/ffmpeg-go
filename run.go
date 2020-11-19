@@ -175,17 +175,20 @@ func (s *Stream) GetArgs() []string {
 			filterNodes = append(filterNodes, n)
 		}
 	}
-
+	// input args from inputNodes
 	for _, n := range inputNodes {
 		args = append(args, getInputArgs(n)...)
 	}
+	// filter args from filterNodes
 	filterArgs := _getFilterArg(filterNodes, outGoingMap, streamNameMap)
 	if filterArgs != "" {
 		args = append(args, "-filter_complex", filterArgs)
 	}
+	// output args from outputNodes
 	for _, n := range outputNodes {
 		args = append(args, _getOutputArgs(n, streamNameMap)...)
 	}
+	// global args with outputNodes
 	for _, n := range globalNodes {
 		args = append(args, _getGlobalArgs(n)...)
 	}
