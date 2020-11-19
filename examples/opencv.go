@@ -62,23 +62,25 @@ func openCvProcess(xmlFile string, reader io.ReadCloser, w, h int) {
 		if img.Empty() {
 			continue
 		}
+		img2 := gocv.NewMat()
+		gocv.CvtColor(img, &img2, gocv.ColorBGRToRGB)
 
 		// detect faces
-		rects := classifier.DetectMultiScale(img)
+		rects := classifier.DetectMultiScale(img2)
 		fmt.Printf("found %d faces\n", len(rects))
 
 		// draw a rectangle around each face on the original image,
 		// along with text identifing as "Human"
 		for _, r := range rects {
-			gocv.Rectangle(&img, r, blue, 3)
+			gocv.Rectangle(&img2, r, blue, 3)
 
 			size := gocv.GetTextSize("Human", gocv.FontHersheyPlain, 1.2, 2)
 			pt := image.Pt(r.Min.X+(r.Min.X/2)-(size.X/2), r.Min.Y-2)
-			gocv.PutText(&img, "Human", pt, gocv.FontHersheyPlain, 1.2, blue, 2)
+			gocv.PutText(&img2, "Human", pt, gocv.FontHersheyPlain, 1.2, blue, 2)
 		}
 
 		// show the image in the window, and wait 1 millisecond
-		window.IMShow(img)
+		window.IMShow(img2)
 		if window.WaitKey(10) >= 0 {
 			break
 		}
