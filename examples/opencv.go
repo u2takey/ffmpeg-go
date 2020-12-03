@@ -81,6 +81,8 @@ func openCvProcess(xmlFile string, reader io.ReadCloser, w, h int) {
 
 		// show the image in the window, and wait 1 millisecond
 		window.IMShow(img2)
+		img.Close()
+		img2.Close()
 		if window.WaitKey(10) >= 0 {
 			break
 		}

@@ -91,6 +91,24 @@ see complete example at: [opencv](./examples/opencv.go)
 
 result: ![image](./examples/sample_data/face-detect.jpg)
 
+## Set cpu limit/request for ffmpeg-go
+
+```go
+e := ComplexFilterExample("./sample_data/in1.mp4", "./sample_data/overlay.png", "./sample_data/out2.mp4")
+err := e.RunWithResource(0.1, 0.5)
+if err != nil {
+    assert.Nil(t, err)
+}
+```
+
+result from command top: we will see ffmpeg used 0.5 core as expected.
+
+```bash
+> top 
+PID    USER       PR  NI    VIRT    RES    SHR S  %CPU   %MEM     TIME+ COMMAND
+1386105 root      20   0 2114152 273780  31672 R  50.2   1.7      0:16.79 ffmpeg
+```
+
 # View Graph
 
 function view generate [mermaid](https://mermaid-js.github.io/mermaid/#/) chart, which can be use in markdown or view [online](https://mermaid-js.github.io/mermaid-live-editor/)
