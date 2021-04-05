@@ -69,6 +69,14 @@ func TestSimpleExample(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestSimpleOverLayExample(t *testing.T) {
+	err := Input(TestInputFile1, nil).
+		Overlay(Input(TestOverlayFile), "").
+		Output(TestOutputFile1).OverWriteOutput().
+		Run()
+	assert.Nil(t, err)
+}
+
 func ComplexFilterExample() *Stream {
 	split := Input(TestInputFile1).VFlip().Split()
 	split0, split1 := split.Get("0"), split.Get("1")
