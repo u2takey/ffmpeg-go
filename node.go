@@ -17,6 +17,14 @@ type Stream struct {
 	Context  context.Context
 }
 
+type RunHook struct {
+	f      func()
+	done   <-chan struct{}
+	closer interface {
+		Close() error
+	}
+}
+
 func NewStream(node *Node, streamType string, label Label, selector Selector) *Stream {
 	return &Stream{
 		Node:     node,

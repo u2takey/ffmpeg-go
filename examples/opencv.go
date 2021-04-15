@@ -1,3 +1,5 @@
+// +build gocv
+
 package examples
 
 import (
@@ -10,6 +12,11 @@ import (
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 	"gocv.io/x/gocv"
 )
+
+func TestExampleOpenCvFaceDetect(t *testing.T) {
+	ExampleFaceDetection("./sample_data/head-pose-face-detection-male-short.mp4",
+		"./sample_data/haarcascade_frontalface_default.xml")
+}
 
 func readProcess(infileName string, writer io.WriteCloser) <-chan error {
 	log.Println("Starting ffmpeg process1")

@@ -175,6 +175,14 @@ func (a KwArgs) GetDefault(k string, defaultV interface{}) interface{} {
 	return defaultV
 }
 
+func (a KwArgs) PopDefault(k string, defaultV interface{}) interface{} {
+	if v, ok := a[k]; ok {
+		defer delete(a, k)
+		return v
+	}
+	return defaultV
+}
+
 func ConvertKwargsToCmdLineArgs(kwargs KwArgs) []string {
 	var keys, args []string
 	for k := range kwargs {

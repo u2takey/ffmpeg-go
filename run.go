@@ -242,9 +242,15 @@ func (s *Stream) Compile() *exec.Cmd {
 }
 
 func (s *Stream) Run() error {
-	err := s.Compile().Run()
-	if err != nil {
-		return err
+	if s.Context.Value("run_hook") != nil {
+		hook := s.Context.Value("run_hook").(*RunHook)
+		go hook.f()
+		defer func() {
+			if hook.closer != nil {
+				_ = hook.closer.Close()
+			}
+			<-hook.done
+		}()
 	}
-	return nil
+	return s.Compile().Run()
 }
