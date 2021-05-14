@@ -19,7 +19,7 @@ func ProbeWithTimeout(fileName string, timeOut time.Duration, kwargs KwArgs) (st
 		"of":           "json",
 	}
 
-	return ProbeWithTimeoutExec(fileName, 0, MergeKwArgs([]KwArgs{args, kwargs}))
+	return ProbeWithTimeoutExec(fileName, timeOut, MergeKwArgs([]KwArgs{args, kwargs}))
 }
 
 func ProbeWithTimeoutExec(fileName string, timeOut time.Duration, kwargs KwArgs) (string, error) {
