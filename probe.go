@@ -13,8 +13,17 @@ func Probe(fileName string, kwargs ...KwArgs) (string, error) {
 }
 
 func ProbeWithTimeout(fileName string, timeOut time.Duration, kwargs KwArgs) (string, error) {
-	args := []string{"-show_format", "-show_streams", "-of", "json"}
-	args = append(args, ConvertKwargsToCmdLineArgs(kwargs)...)
+	args := KwArgs{
+		"show_format":  "",
+		"show_streams": "",
+		"of":           "json",
+	}
+
+	return ProbeWithTimeoutExec(fileName, timeOut, MergeKwArgs([]KwArgs{args, kwargs}))
+}
+
+func ProbeWithTimeoutExec(fileName string, timeOut time.Duration, kwargs KwArgs) (string, error) {
+	args := ConvertKwargsToCmdLineArgs(kwargs)
 	args = append(args, fileName)
 	ctx := context.Background()
 	if timeOut > 0 {
