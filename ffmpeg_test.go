@@ -77,6 +77,13 @@ func TestSimpleOverLayExample(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestSimpleOutputArgs(t *testing.T) {
+	cmd := Input(TestInputFile1).Output("imageFromVideo_%d.jpg", KwArgs{"vf": "fps=3", "qscale:v": 2})
+	assert.Equal(t, []string{
+		"-i", "./examples/sample_data/in1.mp4", "-qscale:v",
+		"2", "-vf", "fps=3", "imageFromVideo_%d.jpg"}, cmd.GetArgs())
+}
+
 func ComplexFilterExample() *Stream {
 	split := Input(TestInputFile1).VFlip().Split()
 	split0, split1 := split.Get("0"), split.Get("1")
@@ -303,3 +310,13 @@ func TestView(t *testing.T) {
 	t.Log(a)
 	t.Log(b)
 }
+
+//func TestAvFoundation(t *testing.T) {
+//	out := Input("default:none", KwArgs{"f": "avfoundation", "framerate": "30"}).
+//		Output("output.mp4", KwArgs{"format": "mp4"}).
+//		OverWriteOutput()
+//	assert.Equal(t, []string{"-f", "avfoundation", "-framerate",
+//		"30", "-i", "default:none", "-f", "mp4", "output.mp4", "-y"}, out.GetArgs())
+//	err := out.Run()
+//	assert.Nil(t, err)
+//}
