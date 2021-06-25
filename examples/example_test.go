@@ -49,3 +49,12 @@ func TestSimpleS3StreamExample(t *testing.T) {
 		Run()
 	assert.Nil(t, err)
 }
+
+func TestExampleMultipleOutput(t *testing.T) {
+	input := ffmpeg.Input("./sample_data/in1.mp4").Split()
+	out1 := input.Get("0").Filter("scale", ffmpeg.Args{"1920:-1"}).Output("./sample_data/1920.mp4", ffmpeg.KwArgs{"b:v": "5000k"})
+	out2 := input.Get("1").Filter("scale", ffmpeg.Args{"1280:-1"}).Output("./sample_data/1280.mp4", ffmpeg.KwArgs{"b:v": "2800k"})
+
+	err := ffmpeg.MergeOutputs(out1, out2).OverWriteOutput().ErrorToStdOut().Run()
+	assert.Nil(t, err)
+}
