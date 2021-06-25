@@ -260,7 +260,7 @@ func (n *Node) GetFilter(outgoingEdges []DagEdge) string {
 	if n.name == "split" || n.name == "asplit" {
 		args = []string{fmt.Sprintf("%d", len(outgoingEdges))}
 	}
-	args = Args(args).EscapeWith("\\'=:")
+	// args = Args(args).EscapeWith("\\'=:")
 	for _, k := range kwargs.EscapeWith("\\'=:").SortedKeys() {
 		v := getString(kwargs[k])
 		if v != "" {

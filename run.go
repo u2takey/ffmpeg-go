@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"os"
 	"os/exec"
 	"sort"
 	"strings"
@@ -223,6 +224,15 @@ func (s *Stream) WithOutput(out ...io.Writer) *Stream {
 		s.Context = context.WithValue(s.Context, "Stderr", out[1])
 	}
 	return s
+}
+
+func (s *Stream) WithErrorOutput(out io.Writer) *Stream {
+	s.Context = context.WithValue(s.Context, "Stderr", out)
+	return s
+}
+
+func (s *Stream) ErrorToStdOut() *Stream {
+	return s.WithErrorOutput(os.Stdout)
 }
 
 // for test

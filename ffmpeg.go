@@ -52,10 +52,7 @@ func (s *Stream) OverwriteOutput(stream *Stream) *Stream {
 }
 
 // Include all given outputs in one ffmpeg command line
-func (s *Stream) MergeOutputs(streams ...*Stream) *Stream {
-	if s.Type != "OutputStream" {
-		panic("cannot merge outputs on non-OutputStream")
-	}
+func MergeOutputs(streams ...*Stream) *Stream {
 	return NewMergeOutputsNode("merge_output", streams).Stream("", "")
 }
 
