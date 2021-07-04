@@ -81,6 +81,7 @@ func visualizeForMermaidAsFlowChart(s *Stream) (string, error) {
 		next := outGoingMap[node.Hash()]
 		for k, v := range next {
 			for _, nextNode := range v {
+				// todo ignore merged output
 				label := string(k)
 				if label == "" {
 					label = "<>"
