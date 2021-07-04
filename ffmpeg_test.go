@@ -84,6 +84,31 @@ func TestSimpleOutputArgs(t *testing.T) {
 		"2", "-vf", "fps=3", "imageFromVideo_%d.jpg"}, cmd.GetArgs())
 }
 
+func TestAutomaticStreamSelection(t *testing.T) {
+	// example from http://ffmpeg.org/ffmpeg-all.html
+	input := []*Stream{Input("A.avi"), Input("B.mp4")}
+	out1 := Output(input, "out1.mkv")
+	out2 := Output(input, "out2.wav")
+	out3 := Output(input, "out3.mov", KwArgs{"map": "1:a", "c:a": "copy"})
+	cmd := MergeOutputs(out1, out2, out3)
+	printArgs(cmd.GetArgs())
+	printGraph(cmd)
+}
+
+func TestLabeledFiltergraph(t *testing.T) {
+	// example from http://ffmpeg.org/ffmpeg-all.html
+	in1, in2, in3 := Input("A.avi"), Input("B.mp4"), Input("C.mkv")
+	in2Split := in2.Get("v").Hue(KwArgs{"s": 0}).Split()
+	overlay := Filter([]*Stream{in1, in2}, "overlay", nil)
+	aresample := Filter([]*Stream{in1, in2, in3}, "aresample", nil)
+	out1 := Output([]*Stream{in2Split.Get("outv1"), overlay, aresample}, "out1.mp4", KwArgs{"an": ""})
+	out2 := Output([]*Stream{in1, in2, in3}, "out2.mkv")
+	out3 := in2Split.Get("outv2").Output("out3.mkv", KwArgs{"map": "1:a:0"})
+	cmd := MergeOutputs(out1, out2, out3)
+	printArgs(cmd.GetArgs())
+	printGraph(cmd)
+}
+
 func ComplexFilterExample() *Stream {
 	split := Input(TestInputFile1).VFlip().Split()
 	split0, split1 := split.Get("0"), split.Get("1")
@@ -309,6 +334,19 @@ func TestView(t *testing.T) {
 
 	t.Log(a)
 	t.Log(b)
+}
+
+func printArgs(args []string) {
+	for _, a := range args {
+		fmt.Printf("%s ", a)
+	}
+	fmt.Println()
+}
+
+func printGraph(s *Stream) {
+	fmt.Println()
+	v, _ := s.View(ViewTypeFlowChart)
+	fmt.Println(v)
 }
 
 //func TestAvFoundation(t *testing.T) {
