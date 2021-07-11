@@ -2,8 +2,7 @@
 
 ffmpeg-go is golang port of https://github.com/kkroening/ffmpeg-python
 
-check ffmpeg_test.go for examples.
-
+check examples/example_test.go and ffmpeg_test.go for more examples.
 
 # Examples
 
@@ -20,6 +19,50 @@ err := Concat([]*Stream{
     OverWriteOutput().
     Run()
 ```
+
+## Transcoding From One Codec To Another
+
+```go
+err := ffmpeg.Input("./sample_data/in1.mp4").
+		Output("./sample_data/out1.mp4", ffmpeg.KwArgs{"c:v": "libx265"}).
+		OverWriteOutput().ErrorToStdOut().Run()
+```
+
+## Cut Video From Timestamp
+
+```go
+err := ffmpeg.Input("./sample_data/in1.mp4", ffmpeg.KwArgs{"ss": 1}).
+    Output("./sample_data/out1.mp4", ffmpeg.KwArgs{"t": 1}).OverWriteOutput().Run()
+assert.Nil(t, err)
+```
+
+## Add Watermark For Video
+```go
+// show watermark with size 64:-1 in the top left corner after seconds 1
+overlay := ffmpeg.Input("./sample_data/overlay.png").Filter("scale", ffmpeg.Args{"64:-1"})
+err := ffmpeg.Filter(
+    []*ffmpeg.Stream{
+        ffmpeg.Input("./sample_data/in1.mp4"),
+        overlay,
+    }, "overlay", ffmpeg.Args{"10:10"}, ffmpeg.KwArgs{"enable": "gte(t,1)"}).
+    Output("./sample_data/out1.mp4").OverWriteOutput().ErrorToStdOut().Run()
+```
+
+result:
+
+![img.png](./docs/example_overlay.png)
+
+## Cut Video For Gif 
+
+```go
+err := ffmpeg.Input("./sample_data/in1.mp4", ffmpeg.KwArgs{"ss": "1"}).
+    Output("./sample_data/out1.gif", ffmpeg.KwArgs{"s": "320x240", "pix_fmt": "rgb24", "t": "3", "r": "3"}).
+    OverWriteOutput().ErrorToStdOut().Run()
+```
+
+result:
+
+![img.png](./docs/example_gif.gif)
 
 ## Task Frame From Video
 
@@ -51,8 +94,20 @@ result :
 
 ![image](./examples/sample_data/out1.jpeg)
 
+## Get Multiple Output
 
-## Show Ffmpeg Progress
+```go
+// get multiple output with different size/bitrate
+input := ffmpeg.Input("./sample_data/in1.mp4").Split()
+out1 := input.Get("0").Filter("scale", ffmpeg.Args{"1920:-1"}).
+Output("./sample_data/1920.mp4", ffmpeg.KwArgs{"b:v": "5000k"})
+out2 := input.Get("1").Filter("scale", ffmpeg.Args{"1280:-1"}).
+Output("./sample_data/1280.mp4", ffmpeg.KwArgs{"b:v": "2800k"})
+
+err := ffmpeg.MergeOutputs(out1, out2).OverWriteOutput().ErrorToStdOut().Run()
+```
+
+## Show FFmpeg Progress
 
 see complete example at: [showProgress](./examples/showProgress.go)
 
@@ -85,13 +140,13 @@ progress:  1.00
 progress:  done
 ```
 
-## Use Ffmpeg-go With Open-cv (gocv) For Face-detect
+## Integrate FFmpeg-go With Open-CV (gocv) For Face-detect
 
 see complete example at: [opencv](./examples/opencv.go)
 
 result: ![image](./examples/sample_data/face-detect.jpg)
 
-## Set cpu limit/request for ffmpeg-go
+## Set Cpu limit/request For FFmpeg-go
 
 ```go
 e := ComplexFilterExample("./sample_data/in1.mp4", "./sample_data/overlay.png", "./sample_data/out2.mp4")
@@ -109,7 +164,7 @@ PID    USER       PR  NI    VIRT    RES    SHR S  %CPU   %MEM     TIME+ COMMAND
 1386105 root      20   0 2114152 273780  31672 R  50.2   1.7      0:16.79 ffmpeg
 ```
 
-# View Graph
+# View Progress Graph
 
 function view generate [mermaid](https://mermaid-js.github.io/mermaid/#/) chart, which can be use in markdown or view [online](https://mermaid-js.github.io/mermaid-live-editor/)
 
