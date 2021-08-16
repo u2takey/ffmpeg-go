@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	ffmpeg "github.com/u2takey/ffmpeg-go"
+	ffmpeg "github.com/goodwin332/ffmpeg-go"
 )
 
 func ComplexFilterExample(testInputFile, testOverlayFile, testOutputFile string) *ffmpeg.Stream {

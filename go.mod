@@ -1,4 +1,4 @@
-module github.com/u2takey/ffmpeg-go
+module github.com/goodwin332/ffmpeg-go
 
 go 1.14
 

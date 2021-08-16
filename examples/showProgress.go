@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
+	ffmpeg "github.com/goodwin332/ffmpeg-go"
 	"github.com/tidwall/gjson"
-	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
 // ExampleShowProgress is an example of using the ffmpeg `-progress` option with a
