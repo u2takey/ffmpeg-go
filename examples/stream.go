@@ -6,7 +6,7 @@ import (
 	"io"
 	"log"
 
-	ffmpeg "github.com/u2takey/ffmpeg-go"
+	ffmpeg "github.com/goodwin332/ffmpeg-go"
 )
 
 // ExampleStream

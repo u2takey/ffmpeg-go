@@ -12,7 +12,7 @@ import (
 	"log"
 	"testing"
 
-	ffmpeg "github.com/u2takey/ffmpeg-go"
+	ffmpeg "github.com/goodwin332/ffmpeg-go"
 	"gocv.io/x/gocv"
 )
 

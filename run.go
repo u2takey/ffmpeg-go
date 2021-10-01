@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -68,6 +69,11 @@ func _getAllLabelsInSorted(m map[Label]NodeInfo) []Label {
 		r = append(r, a)
 	}
 	sort.Slice(r, func(i, j int) bool {
+		if intI, err := strconv.Atoi(string(r[i])); err == nil {
+			if intJ, err := strconv.Atoi(string(r[j])); err == nil {
+				return intI < intJ
+			}
+		}
 		return r[i] < r[j]
 	})
 	return r
