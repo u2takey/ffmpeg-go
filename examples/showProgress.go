@@ -1,6 +1,7 @@
 package examples
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"math/rand"
@@ -12,7 +13,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tidwall/gjson"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
@@ -23,7 +23,10 @@ func ExampleShowProgress(inFileName, outFileName string) {
 	if err != nil {
 		panic(err)
 	}
-	totalDuration := gjson.Get(a, "format.duration").Float()
+	totalDuration, err := probeDuration(a)
+	if err != nil {
+		panic(err)
+	}
 
 	err = ffmpeg.Input(inFileName).
 		Output(outFileName, ffmpeg.KwArgs{"c:v": "libx264", "preset": "veryslow"}).
@@ -80,4 +83,25 @@ func TempSock(totalDuration float64) string {
 	}()
 
 	return sockFileName
+}
+
+type probeFormat struct {
+	Duration string `json:"duration"`
+}
+
+type probeData struct {
+	Format probeFormat `json:"format"`
+}
+
+func probeDuration(a string) (float64, error) {
+	pd := probeData{}
+	err := json.Unmarshal([]byte(a), &pd)
+	if err != nil {
+		return 0, err
+	}
+	f, err := strconv.ParseFloat(pd.Format.Duration, 64)
+	if err != nil {
+		return 0, err
+	}
+	return f, nil
 }
