@@ -26,7 +26,7 @@ func ComplexFilterExample(testInputFile, testOverlayFile, testOutputFile string)
 // 1386105 root      20   0 2114152 273780  31672 R  50.2   1.7      0:16.79 ffmpeg
 func TestLimitCpu(t *testing.T) {
 	e := ComplexFilterExample("./sample_data/in1.mp4", "./sample_data/overlay.png", "./sample_data/out2.mp4")
-	err := e.WithCpuCoreRequest(0.1).WithCpuCoreLimit(0.5).RunLinux()
+	err := e.RunWithResource(0.1, 0.5)
 	if err != nil {
 		assert.Nil(t, err)
 	}

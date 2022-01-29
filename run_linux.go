@@ -68,6 +68,10 @@ func writeCGroupFile(rootPath, file string, value string) error {
 	return ioutil.WriteFile(filepath.Join(rootPath, file), []byte(value), 0755)
 }
 
+func (s *Stream) RunWithResource(cpuRequest, cpuLimit float32) error {
+	return s.WithCpuCoreRequest(cpuRequest).WithCpuCoreLimit(cpuLimit).RunLinux()
+}
+
 func (s *Stream) RunLinux() error {
 	a := s.Context.Value(cgroupConfigKey).(*cgroupConfig)
 	if a.cpuRequest > a.cpuLimit {
