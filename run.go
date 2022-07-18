@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"sort"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -90,7 +91,7 @@ func _allocateFilterStreamNames(nodes []*Node, outOutingEdgeMaps map[int]map[Lab
 		// todo sort
 		for _, l := range _getAllLabelsSorted(om) {
 			if len(om[l]) > 1 {
-				panic(fmt.Sprintf(`encountered %s with multiple outgoing edges 
+				panic(fmt.Sprintf(`encountered %s with multiple outgoing edges
 with same upstream label %s; a 'split'' filter is probably required`, n.name, l))
 			}
 			streamNameMap[fmt.Sprintf("%d%s", n.Hash(), l)] = fmt.Sprintf("s%d", sc)
@@ -235,8 +236,19 @@ func (s *Stream) ErrorToStdOut() *Stream {
 	return s.WithErrorOutput(os.Stdout)
 }
 
+type CompilationOption func(s *Stream, cmd *exec.Cmd)
+
+// SeparateProcessGroup ensures that the command is run in a separate process
+// group. This is useful to enable handling of signals such as SIGINT without
+// propagating them to the ffmpeg process.
+func SeparateProcessGroup() CompilationOption {
+	return func(s *Stream, cmd *exec.Cmd) {
+		cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true, Pgid: 0}
+	}
+}
+
 // for test
-func (s *Stream) Compile() *exec.Cmd {
+func (s *Stream) Compile(options ...CompilationOption) *exec.Cmd {
 	args := s.GetArgs()
 	cmd := exec.CommandContext(s.Context, "ffmpeg", args...)
 	if a, ok := s.Context.Value("Stdin").(io.Reader); ok {
@@ -248,10 +260,15 @@ func (s *Stream) Compile() *exec.Cmd {
 	if a, ok := s.Context.Value("Stderr").(io.Writer); ok {
 		cmd.Stderr = a
 	}
+
+	for _, option := range options {
+		option(s, cmd)
+	}
+
 	return cmd
 }
 
-func (s *Stream) Run() error {
+func (s *Stream) Run(options ...CompilationOption) error {
 	if s.Context.Value("run_hook") != nil {
 		hook := s.Context.Value("run_hook").(*RunHook)
 		go hook.f()
@@ -262,5 +279,5 @@ func (s *Stream) Run() error {
 			<-hook.done
 		}()
 	}
-	return s.Compile().Run()
+	return s.Compile(options...).Run()
 }
