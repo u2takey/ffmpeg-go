@@ -201,7 +201,7 @@ func (n *Node) __getIncomingEdgeMap() map[Label]NodeInfo {
 	incomingEdgeMap := map[Label]NodeInfo{}
 	streamMap := getStreamMap(n.streamSpec)
 	for i, s := range streamMap {
-		incomingEdgeMap[Label(fmt.Sprintf("%v", i))] = NodeInfo{
+		incomingEdgeMap[Label(fmt.Sprintf("%06v", i))] = NodeInfo{
 			Node:     s.Node,
 			Label:    s.Label,
 			Selector: s.Selector,
