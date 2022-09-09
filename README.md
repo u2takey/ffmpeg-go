@@ -142,7 +142,7 @@ progress:  done
 
 ## Integrate FFmpeg-go With Open-CV (gocv) For Face-detect
 
-see complete example at: [opencv](./examples/opencv.go)
+see complete example at: [opencv](./examples/opencv_test.go)
 
 result: ![image](./examples/sample_data/face-detect.jpg)
 
