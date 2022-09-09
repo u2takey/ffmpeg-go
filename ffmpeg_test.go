@@ -343,6 +343,25 @@ func TestView(t *testing.T) {
 	t.Log(b)
 }
 
+func TestInputOrder(t *testing.T) {
+	const streamNum = 12
+	streams := make([]*Stream, 0, streamNum)
+	expectedFilenames := make([]string, 0, streamNum)
+	for i := 0; i < streamNum; i++ {
+		filename := fmt.Sprintf("%02d.mp4", i) // These files don't exist, but it's fine in this test.
+		expectedFilenames = append(expectedFilenames, filename)
+		streams = append(streams, Input(filename))
+	}
+	stream := Concat(streams).Output("output.mp4")
+	args := stream.GetArgs()
+	actualFilenames := make([]string, 0, streamNum)
+	//Command looks like `-i 00.mp4 -i 01.mp4...` so actual filenames are the first streamNum even args
+	for i := 1; i <= streamNum*2; i += 2 {
+		actualFilenames = append(actualFilenames, args[i])
+	}
+	assert.Equal(t, expectedFilenames, actualFilenames)
+}
+
 func printArgs(args []string) {
 	for _, a := range args {
 		fmt.Printf("%s ", a)
