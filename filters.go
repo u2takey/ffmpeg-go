@@ -85,7 +85,7 @@ func (s *Stream) DrawBox(x, y, w, h int, color string, thickness int, kwargs ...
 func (s *Stream) Drawtext(text string, x, y int, escape bool, kwargs ...KwArgs) *Stream {
 	AssertType(s.Type, "FilterableStream", "drawtext")
 	args := MergeKwArgs(kwargs)
-	if escape {
+	if escape && text != "" {
 		text = fmt.Sprintf("%q", text)
 	}
 	if text != "" {
