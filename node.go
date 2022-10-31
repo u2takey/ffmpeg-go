@@ -10,11 +10,12 @@ import (
 )
 
 type Stream struct {
-	Node     *Node
-	Label    Label
-	Selector Selector
-	Type     string
-	Context  context.Context
+	Node       *Node
+	Label      Label
+	Selector   Selector
+	Type       string
+	FfmpegPath string
+	Context    context.Context
 }
 
 type RunHook struct {
@@ -27,11 +28,12 @@ type RunHook struct {
 
 func NewStream(node *Node, streamType string, label Label, selector Selector) *Stream {
 	return &Stream{
-		Node:     node,
-		Label:    label,
-		Selector: selector,
-		Type:     streamType,
-		Context:  context.Background(),
+		Node:       node,
+		Label:      label,
+		Selector:   selector,
+		Type:       streamType,
+		FfmpegPath: "ffmpeg",
+		Context:    context.Background(),
 	}
 }
 

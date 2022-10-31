@@ -248,10 +248,15 @@ func SeparateProcessGroup() CompilationOption {
 	}
 }
 
+func (s *Stream) SetFfmpegPath(path string) *Stream {
+	s.FfmpegPath = path
+	return s
+}
+
 // for test
 func (s *Stream) Compile(options ...CompilationOption) *exec.Cmd {
 	args := s.GetArgs()
-	cmd := exec.CommandContext(s.Context, "ffmpeg", args...)
+	cmd := exec.CommandContext(s.Context, s.FfmpegPath, args...)
 	if a, ok := s.Context.Value("Stdin").(io.Reader); ok {
 		cmd.Stdin = a
 	}
