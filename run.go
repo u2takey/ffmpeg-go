@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 	"sort"
@@ -266,10 +265,11 @@ func (s *Stream) Compile(options ...CompilationOption) *exec.Cmd {
 	if a, ok := s.Context.Value("Stderr").(io.Writer); ok {
 		cmd.Stderr = a
 	}
+
 	for _, option := range options {
 		option(s, cmd)
 	}
-	log.Printf("compiled command: ffmpeg %s\n", strings.Join(args, " "))
+
 	return cmd
 }
 
