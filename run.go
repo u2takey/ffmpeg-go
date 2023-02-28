@@ -236,6 +236,10 @@ func (s *Stream) ErrorToStdOut() *Stream {
 	return s.WithErrorOutput(os.Stdout)
 }
 
+type CommandOption func(cmd *exec.Cmd)
+
+var GlobalCommandOptions = make([]CommandOption, 0)
+
 type CompilationOption func(s *Stream, cmd *exec.Cmd)
 
 func (s *Stream) SetFfmpegPath(path string) *Stream {
@@ -258,6 +262,9 @@ func (s *Stream) Compile(options ...CompilationOption) *exec.Cmd {
 	}
 	for _, option := range options {
 		option(s, cmd)
+	}
+	for _, option := range GlobalCommandOptions {
+		option(cmd)
 	}
 	log.Printf("compiled command: ffmpeg %s\n", strings.Join(args, " "))
 	return cmd
