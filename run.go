@@ -9,7 +9,6 @@ import (
 	"os/exec"
 	"sort"
 	"strings"
-	"syscall"
 	"time"
 )
 
@@ -238,15 +237,6 @@ func (s *Stream) ErrorToStdOut() *Stream {
 }
 
 type CompilationOption func(s *Stream, cmd *exec.Cmd)
-
-// SeparateProcessGroup ensures that the command is run in a separate process
-// group. This is useful to enable handling of signals such as SIGINT without
-// propagating them to the ffmpeg process.
-func SeparateProcessGroup() CompilationOption {
-	return func(s *Stream, cmd *exec.Cmd) {
-		cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true, Pgid: 0}
-	}
-}
 
 func (s *Stream) SetFfmpegPath(path string) *Stream {
 	s.FfmpegPath = path

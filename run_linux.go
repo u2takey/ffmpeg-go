@@ -140,3 +140,12 @@ func (s *Stream) RunLinux() error {
 
 	return cmd.Wait()
 }
+
+// SeparateProcessGroup ensures that the command is run in a separate process
+// group. This is useful to enable handling of signals such as SIGINT without
+// propagating them to the ffmpeg process.
+func SeparateProcessGroup() CompilationOption {
+	return func(s *Stream, cmd *exec.Cmd) {
+		cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true, Pgid: 0}
+	}
+}
