@@ -34,6 +34,9 @@ func ProbeWithTimeoutExec(fileName string, timeOut time.Duration, kwargs KwArgs)
 	cmd := exec.CommandContext(ctx, "ffprobe", args...)
 	buf := bytes.NewBuffer(nil)
 	cmd.Stdout = buf
+	for _, option := range GlobalCommandOptions {
+		option(cmd)
+	}
 	err := cmd.Run()
 	if err != nil {
 		return "", err
