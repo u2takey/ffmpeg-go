@@ -247,7 +247,12 @@ func (s *Stream) SetFfmpegPath(path string) *Stream {
 	return s
 }
 
-// for test
+var LogCompiledCommand bool = true
+
+func (s *Stream) Silent(isSilent bool) *Stream {
+	LogCompiledCommand = !isSilent
+	return s
+}
 func (s *Stream) Compile(options ...CompilationOption) *exec.Cmd {
 	args := s.GetArgs()
 	cmd := exec.CommandContext(s.Context, s.FfmpegPath, args...)
@@ -260,13 +265,12 @@ func (s *Stream) Compile(options ...CompilationOption) *exec.Cmd {
 	if a, ok := s.Context.Value("Stderr").(io.Writer); ok {
 		cmd.Stderr = a
 	}
-	for _, option := range options {
-		option(s, cmd)
-	}
 	for _, option := range GlobalCommandOptions {
 		option(cmd)
 	}
-	log.Printf("compiled command: ffmpeg %s\n", strings.Join(args, " "))
+  if LogCompiledCommand {
+		log.Printf("compiled command: ffmpeg %s\n", strings.Join(args, " "))
+	}
 	return cmd
 }
 
