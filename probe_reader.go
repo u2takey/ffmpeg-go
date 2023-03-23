@@ -3,6 +3,7 @@ package ffmpeg_go
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"os/exec"
 	"time"
@@ -37,10 +38,12 @@ func ProbeReaderWithTimeoutExec(r io.Reader, timeOut time.Duration, kwargs KwArg
 	cmd := exec.CommandContext(ctx, "ffprobe", args...)
 	cmd.Stdin = r
 	buf := bytes.NewBuffer(nil)
+	stdErrBuf := bytes.NewBuffer(nil)
 	cmd.Stdout = buf
+	cmd.Stderr = stdErrBuf
 	err := cmd.Run()
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("[%s] %w", string(stdErrBuf.Bytes()), err)
 	}
 	return string(buf.Bytes()), nil
 }
