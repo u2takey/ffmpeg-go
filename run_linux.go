@@ -5,8 +5,10 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
+	"syscall"
 
 	"github.com/u2takey/go-utils/rand"
 )

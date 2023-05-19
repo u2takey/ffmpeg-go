@@ -1,6 +1,8 @@
 package ffmpeg_go
 
 import (
+	"os/exec"
+	"syscall"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
