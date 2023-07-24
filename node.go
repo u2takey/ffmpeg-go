@@ -268,7 +268,7 @@ func (n *Node) GetFilter(outgoingEdges []DagEdge) string {
 		if v != "" {
 			args = append(args, fmt.Sprintf("%s=%s", k, v))
 		} else {
-			args = append(args, fmt.Sprintf("%s", k))
+			args = append(args, k)
 		}
 	}
 	ret = escapeChars(n.name, "\\'=:")
