@@ -4,6 +4,30 @@ ffmpeg-go is golang port of https://github.com/kkroening/ffmpeg-python
 
 check examples/example_test.go and ffmpeg_test.go for more examples.
 
+# How to get and use
+You can get this package via:
+```
+go get -u github.com/u2takey/ffmpeg-go
+```
+
+> **Note**: `ffmpeg-go` makes no attempt to download/install FFmpeg, as `ffmpeg-go` is merely a pure-Go wrapper - whereas FFmpeg installation is platform-dependent/environment-specific, and is thus the responsibility of the user, as described below.
+
+### Installing FFmpeg
+
+Before using `ffmpeg-go`, FFmpeg must be installed and accessible via the `$PATH` environment variable.
+
+There are a variety of ways to install FFmpeg, such as the [official download links](https://ffmpeg.org/download.html), or using your package manager of choice (e.g. `sudo apt install ffmpeg` on Debian/Ubuntu, `brew install ffmpeg` on OS X, etc.).
+
+Regardless of how FFmpeg is installed, you can check if your environment path is set correctly by running the `ffmpeg` command from the terminal, in which case the version information should appear, as in the following example (truncated for brevity):
+
+```
+$ ffmpeg
+ffmpeg version 4.2.4-1ubuntu0.1 Copyright (c) 2000-2020 the FFmpeg developers
+  built with gcc 9 (Ubuntu 9.3.0-10ubuntu2)
+```
+
+> **Note**: The actual version information displayed here may vary from one system to another; but if a message such as `ffmpeg: command not found` appears instead of the version information, FFmpeg is not properly installed.
+
 # Examples
 
 ```go
