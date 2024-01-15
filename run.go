@@ -243,7 +243,7 @@ var GlobalCommandOptions = make([]CommandOption, 0)
 type CompilationOption func(s *Stream, cmd *exec.Cmd)
 
 func (s *Stream) SetFfmpegPath(path string) *Stream {
-	s.FfmpegPath = path
+	s.Context = context.WithValue(s.Context, "ffmpeg_path", path)
 	return s
 }
 
@@ -255,7 +255,11 @@ func (s *Stream) Silent(isSilent bool) *Stream {
 }
 func (s *Stream) Compile(options ...CompilationOption) *exec.Cmd {
 	args := s.GetArgs()
-	cmd := exec.CommandContext(s.Context, s.FfmpegPath, args...)
+	ffmpegPath := "ffmpeg"
+	if a, ok := s.Context.Value("ffmpeg_path").(string); ok && a != "" {
+		ffmpegPath = a
+	}
+	cmd := exec.CommandContext(s.Context, ffmpegPath, args...)
 	if a, ok := s.Context.Value("Stdin").(io.Reader); ok {
 		cmd.Stdin = a
 	}
@@ -268,7 +272,7 @@ func (s *Stream) Compile(options ...CompilationOption) *exec.Cmd {
 	for _, option := range GlobalCommandOptions {
 		option(cmd)
 	}
-  if LogCompiledCommand {
+	if LogCompiledCommand {
 		log.Printf("compiled command: ffmpeg %s\n", strings.Join(args, " "))
 	}
 	return cmd
