@@ -30,6 +30,18 @@ func TestExampleReadFrameAsJpeg(t *testing.T) {
 	}
 }
 
+func TestExampleReadTimePositionAsJpeg(t *testing.T) {
+	reader := ExampleReadTimePositionAsJpeg("./sample_data/in1.mp4", 4)
+	img, err := imaging.Decode(reader)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = imaging.Save(img, "./sample_data/out2.jpeg")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestExampleShowProgress(t *testing.T) {
 	ExampleShowProgress("./sample_data/in1.mp4", "./sample_data/out2.mp4")
 }
